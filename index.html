@@ -569,7 +569,7 @@ $('#cfgSave').onclick=cfgSave;$('#cfgCancel').onclick=$('#cfgX').onclick=()=>$('
 $('#cfg').addEventListener('mousedown',e=>{if(e.target.id==='cfg')$('#cfg').hidden=true});
 
 function connect(){
-  const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host);
+  ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host);
   ws.onopen=()=>send({t:'hello',uid,name});
   ws.onclose=()=>{leave();$('#ht').textContent='Reconectando…';setTimeout(connect,2000)};
   ws.onmessage=e=>{const m=JSON.parse(e.data);
