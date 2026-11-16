@@ -8,7 +8,25 @@ let G = {};
 const save = () => {};
 const T = {};
 
+// Arquivos do app (PWA) que o servidor pode entregar
+const FILES = {
+  '/manifest.json': ['manifest.json', 'application/manifest+json'],
+  '/sw.js': ['sw.js', 'application/javascript; charset=utf-8'],
+  '/icon-192.png': ['icon-192.png', 'image/png'],
+  '/icon-512.png': ['icon-512.png', 'image/png'],
+  '/icon-maskable-512.png': ['icon-maskable-512.png', 'image/png'],
+  '/apple-touch-icon.png': ['apple-touch-icon.png', 'image/png']
+};
 const srv = http.createServer((q, r) => {
+  const url = (q.url || '/').split('?')[0], f = FILES[url];
+  if (f) {
+    return fs.readFile(path.join(__dirname, f[0]), (e, d) => {
+      if (e) { r.writeHead(404); return r.end('não encontrado'); }
+      const h = { 'Content-Type': f[1] };
+      if (url === '/sw.js') h['Cache-Control'] = 'no-cache';
+      r.writeHead(200, h); r.end(d);
+    });
+  }
   fs.readFile(path.join(__dirname, 'index.html'), (e, d) => {
     if (e) { r.writeHead(500); return r.end('index.html não encontrado'); }
     r.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); r.end(d);
