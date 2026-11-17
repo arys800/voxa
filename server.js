@@ -67,7 +67,7 @@ wss.on('connection', ws => {
     } else if (!u.uid) return;
     else if (m.t === 'mk') {
       const name = String(m.name || '').trim().slice(0, 30); if (!name) return;
-      const x = { id: 'g' + Date.now().toString(36) + n, name, code: Math.random().toString(36).slice(2, 8).toUpperCase(), m: { [u.uid]: u.name }, ch: { geral: [], jogos: [] } };
+      const x = { id: 'g' + Date.now().toString(36) + n, name, code: Math.random().toString(36).slice(2, 8).toUpperCase(), m: { [u.uid]: u.name }, ch: { geral: [] } };
       G[x.id] = x; save(); pushGroups(u.uid, x.id); state();
     } else if (m.t === 'join') {
       const x = Object.values(G).find(v => v.code === String(m.code || '').trim().toUpperCase());
